@@ -7,6 +7,8 @@ class App:
 
     def test(self):
         self.image.get_info()
+        image_convert = self.image.greyscale()
+
 
 if __name__ == "__main__":
     app = App()

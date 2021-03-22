@@ -27,5 +27,17 @@ class Image:
         else:
             print(f'file_format isn\'t correct {file_format}')
 
-    def show(self):
+    def show(self) -> None:
+        """
+        show the image
+        :return:
+        """
         self.__image.show()
+
+    def save_greyscale(self) -> None:
+        """
+        convert image from rgb to greyscale
+        :return:
+        """
+        name: str = 'test_greyscale'
+        self.__image.convert('LA').save(f'img/{name}.png')
