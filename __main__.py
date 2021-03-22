@@ -1,13 +1,13 @@
-from Image import Image
+from image.Image import Image
+from image.Transform import Transform
 
 
 class App:
     def __init__(self):
-        self.image = Image(image_path='img/test.jpg')
+        self.transform = Transform(image_path='img/greyscale.png')
 
     def test(self):
-        self.image.get_info()
-        image_convert = self.image.greyscale()
+        self.transform.to_ascii()
 
 
 if __name__ == "__main__":
