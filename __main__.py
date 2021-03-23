@@ -1,4 +1,3 @@
-from image.Image import Image
 from image.Transform import Transform
 
 
