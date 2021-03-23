@@ -1,5 +1,7 @@
 from PIL import Image as PilImg
 from PIL import ImageDraw as PilDraw
+from PIL import ImageFont as PilFont
+
 from image.Image import Image
 from random import randint
 
@@ -38,7 +40,7 @@ class Transform(Image):
         pixel_color: dict = {}
 
         # create new image and save it
-        new_img = PilImg.new(mode='1', size=size)
+        new_img = PilImg.new(mode='L', size=size)
         new_img.save('img/new.png')
         new_img.close()
 
@@ -49,17 +51,35 @@ class Transform(Image):
         # check the color for each pixel
         for y in range(0, size[1]):
             for x in range(0, size[0]):
-                coordinate = (x, y)
-                pixel = self.image.getpixel(coordinate)
+                coordinate: tuple = (x, y)
+                pixel = self.image.getpixel(xy=coordinate)
 
                 # stock pixel in the color list and assign ascii to it
                 if pixel not in pixel_color and pixel != 0:
                     pixel_color[pixel] = self.__ascii_list[randint(0, len(self.__ascii_list) - 1)]
 
                 print(f'({x}, {y}) -> {pixel}')
-
-        print(pixel_color)
-        print('FIRST LOOP END')
+        print('CHAR ATTRIBUTION END')
         time.sleep(3)
 
+        # check the pixel color to add the correct character
+        new_img = PilImg.open('img/new.png')
+        set_font_size = PilFont.truetype('arial.ttf', 1)
+        add_ascii = PilDraw.Draw(new_img)
+        for y in range(0, size[1]):
+            for x in range(0, size[0]):
+                coordinate: tuple = (x, y)
+                pixel = self.image.getpixel(xy=coordinate)
+
+                # add character
+                add_ascii.text(coordinate, pixel_color[pixel], 1000, font=set_font_size)
+
+                print(f'{coordinate} -> {pixel}')
+        new_img.save('img/new.png')
         new_img.close()
+
+    def add_char(self):
+        draw = PilDraw.Draw(self.image)
+        draw.text((0, 0), '@', 1000)
+        self.image.save('img/new.png')
+
