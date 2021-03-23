@@ -29,13 +29,13 @@ class Transform(Image):
         TODO
         1- create new image with the size of image to convert
         2- create a list to stock pixel colour with the attribute char
-        2- make a loop to check each pixel and if the colour has no char which refer to,
+        3- make a loop to check each pixel and if the colour has no char which refer to,
             save it and select char if the pixel is black attribute -> ''
-        3- get the pixel position and place char on the new image to the correct coordinate
+        4- get the pixel position and place char on the new image to the correct coordinate
         :return:
         """
         name, size, mode = self._get_info()
-        pixel_color: list = {}
+        pixel_color: dict = {}
 
         # create new image and save it
         new_img = PilImg.new(mode='1', size=size)
@@ -53,27 +53,13 @@ class Transform(Image):
                 pixel = self.image.getpixel(coordinate)
 
                 # stock pixel in the color list and assign ascii to it
-                if len(pixel_color) > 0:
-                    if pixel not in pixel_color and pixel != 0:
-                        pixel_color[pixel] = self.__ascii_list[randint(0, len(self.__ascii_list)-1)]
-                else:
-                    pixel_color[pixel] = self.__ascii_list[randint(0, len(self.__ascii_list)-1)]
+                if pixel not in pixel_color and pixel != 0:
+                    pixel_color[pixel] = self.__ascii_list[randint(0, len(self.__ascii_list) - 1)]
 
                 print(f'({x}, {y}) -> {pixel}')
+
         print(pixel_color)
         print('FIRST LOOP END')
         time.sleep(3)
 
-        # check color of each pixel in the original to get the correct ascii
-        for y in range(0, size[1]):
-            for x in range(0, size[0]):
-                coordinate = (x, y)
-
-                # get the original pixel color
-                original_pixel = pixel_color[self.image.getpixel(xy=coordinate)]
-
-                # get the pixel in the new image
-                new_img = PilImg.open('img/new.png')
-                add_ascii = PilDraw.Draw(new_img)
-                add_ascii.text(xy=coordinate, text=original_pixel)
         new_img.close()
