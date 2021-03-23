@@ -6,7 +6,7 @@ class App:
         self.transform = Transform(image_path='img/greyscale.png')
 
     def test(self):
-        self.transform.to_ascii()
+        self.transform.to_greyscale(path='img', image_name='greyscale2')
 
 
 if __name__ == "__main__":

@@ -14,29 +14,24 @@ class Transform(Image):
         self.image = image_path
         self.__ascii_list = '@*/.,%$()&+-^_:<>=;!?'
 
-    def to_greyscale(self, image_name: str) -> PilImg:
+    def to_greyscale(self, path: str, image_name: str) -> None:
         """
-        convert image from rgb to greyscale
+        convert and save RGB image to greyscale
+        :param path:
         :param image_name:
         :return:
         """
-        img_info = self._get_info()
-        img_load = PilImg.open(img_info[0])
+        img_name = self._get_info()['name']
+        img_load = PilImg.open(img_name)
         img_greyscale = img_load.convert('L')
-        # img_greyscale.save(f'img/{image_name}.png')
-        return img_greyscale
+        img_greyscale.save(f'{path}/{image_name}.png')
 
-    def to_ascii(self):
+    def to_ascii(self) -> None:
         """
-        TODO
-        1- create new image with the size of image to convert
-        2- create a list to stock pixel colour with the attribute char
-        3- make a loop to check each pixel and if the colour has no char which refer to,
-            save it and select char if the pixel is black attribute -> ''
-        4- get the pixel position and place char on the new image to the correct coordinate
+        create and save new image in ascii art
         :return:
         """
-        name, size, mode = self._get_info()
+        size = self._get_info()[1]
         pixel_color: dict = {}
 
         # create new image and save it

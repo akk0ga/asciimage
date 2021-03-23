@@ -5,19 +5,21 @@ class Image:
     def __init__(self):
         self.__image: Pil_Image
 
-    def _get_info(self) -> tuple[str, tuple, str]:
+    def _get_info(self) -> dict:
         """
         get info about the image
         :return:
         """
         file = self.__image
-        file_format: str = file.format
         try:
             name: str = file.filename
-            # (width, height)
             size: tuple = file.size
             mode: str = file.mode
-            return name, size, mode
+            return {
+                'name': name,
+                'size': size,
+                'mode': mode
+            }
         except Pil_Image.UnidentifiedImageError:
             print('image isn\'t correct')
 
