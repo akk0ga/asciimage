@@ -77,9 +77,3 @@ class Transform(Image):
                 print(f'{coordinate} -> {pixel}')
         new_img.save('img/new.png')
         new_img.close()
-
-    def add_char(self):
-        draw = PilDraw.Draw(self.image)
-        draw.text((0, 0), '@', 1000)
-        self.image.save('img/new.png')
-
