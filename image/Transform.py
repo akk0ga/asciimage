@@ -14,7 +14,7 @@ class Transform(Image):
         self.image = image_path
         self.__ascii_list = '@*/.,%$()&+-^_:<>=;!?'
 
-    def to_greyscale(self, path: str, image_name: str) -> None:
+    def to_greyscale(self, image_name: str, path: str = 'img/greyscale') -> None:
         """
         convert and save RGB image to greyscale
         :param path:

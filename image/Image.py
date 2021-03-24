@@ -36,10 +36,19 @@ class Image:
     ===================================
     """
 
-    def set_image(self, image_path: str):
+    def set_image(self, image_path: str) -> None:
+        """
+        set and load image
+        :param image_path:
+        :return:
+        """
         self.__image = Pil_Image.open(image_path)
 
-    def get_image(self):
+    def get_image(self) -> None:
+        """
+        get image
+        :return:
+        """
         return self.__image
 
     image = property(fget=get_image, fset=set_image)
