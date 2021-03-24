@@ -5,6 +5,8 @@ from PIL import ImageFont as PilFont
 from image.Image import Image
 from random import randint
 
+import time
+
 
 class Transform(Image):
     def __init__(self, image_path: str):
@@ -12,19 +14,18 @@ class Transform(Image):
         self.image = image_path
         self.__ascii_list = '@*/.,%$()&+-^_:<>=;!?'
 
-    def to_greyscale(self, image_name: str, path: str = 'img/greyscale', resize: bool = False, resize_dimension: tuple = ()) -> None:
+    def to_greyscale(self, image_name: str, path: str = 'img/greyscale') -> None:
         """
-        convert and save RGB image to greyscale
+        resize convert and save RGB image to resize grayscale image
         :param path:
         :param image_name:
         :return:
         """
-        img_name = self._get_info()['name']
-        img_load = PilImg.open(img_name)
-        img_greyscale = img_load.convert('L')
+        resize = self.image.resize((800, 500))
+        img_greyscale = resize.convert('L')
         img_greyscale.save(f'{path}/{image_name}.png')
 
-    def __get_pixel_color(self, image_size: tuple):
+    def get_pixel_color(self, image_size: tuple):
         """
         get pixel color from
         :return:
@@ -41,26 +42,23 @@ class Transform(Image):
                     pixel_color[pixel] = self.__ascii_list[randint(0, len(self.__ascii_list) - 1)]
         return pixel_color
 
-    def __create_image(self, image_size: tuple, image_name: str = 'new', save_path: str = 'img/ascii') -> None:
-        """
-        create empty image with black background and save it to the selected folder
-        :return:
-        """
-        new_img = PilImg.new(mode='L', size=image_size)
-        new_img.save(f'{save_path}/{image_name}.png')
-        new_img.close()
-
     def to_ascii(self, new_image_name: str = 'new', save_path: str = 'img/ascii',
-                       greyscale_path: str = 'img/greyscale') -> None:
+                 greyscale_path: str = 'img/greyscale') -> None:
         """
         create and save new image in ascii art
         :return:
         """
+        # load and get greyscale image and info
         self.image = f'{greyscale_path}/{new_image_name}.png'
         image_size: tuple = self._get_info()['size']
-        pixel_color = self.__get_pixel_color(image_size=image_size)
-        self.__create_image(image_size=image_size, image_name=new_image_name)
 
+        # get pixel color
+        pixel_color = self.get_pixel_color(image_size=image_size)
+
+        # create new empty image
+        print(pixel_color)
+
+        # load the image create before to draw on
         new_img = PilImg.open(f'{save_path}/{new_image_name}.png')
         set_font_size = PilFont.truetype('arial.ttf', 1)
         add_ascii = PilDraw.Draw(new_img)
