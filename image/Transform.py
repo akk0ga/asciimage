@@ -5,7 +5,7 @@ from PIL import ImageFont as PilFont
 from image.Image import Image
 from random import randint
 
-import time
+import asyncio
 
 
 class Transform(Image):
@@ -26,23 +26,13 @@ class Transform(Image):
         img_greyscale = img_load.convert('L')
         img_greyscale.save(f'{path}/{image_name}.png')
 
-    def to_ascii(self, new_image_name: str = 'new', save_path: str = 'img/ascii', greyscale_path: str = 'img/greyscale') -> None:
+    async def __get_pixel_color(self, image_size: tuple):
         """
-        create and save new image in ascii art
+        get pixel color from
         :return:
         """
-        image_size = self._get_info()['size']
-        pixel_color: dict = {}
+        pixel_color = {}
 
-        # replace the original with the greyscale image
-        self.image = f'{greyscale_path}/{new_image_name}.png'
-
-        # create new empty image and save it
-        new_img = PilImg.new(mode='L', size=image_size)
-        new_img.save(f'{save_path}/{new_image_name}.png')
-        new_img.close()
-
-        # check the shade of grey for each pixel
         for y in range(0, image_size[1]):
             for x in range(0, image_size[0]):
                 coordinate: tuple = (x, y)
@@ -52,8 +42,34 @@ class Transform(Image):
                 if pixel not in pixel_color and pixel > 10:
                     pixel_color[pixel] = self.__ascii_list[randint(0, len(self.__ascii_list) - 1)]
                     print(f'({x}, {y}) -> {pixel}')
-        print('CHAR ATTRIBUTION END')
-        time.sleep(3)
+        return pixel_color
+
+    async def __create_image(self, image_size: tuple, image_name: str = 'new', save_path: str = 'img/ascii') -> None:
+        """
+        create empty image with black background and save it to the selected folder
+        :return:
+        """
+        new_img = PilImg.new(mode='L', size=image_size)
+        new_img.save(f'{save_path}/{image_name}.png')
+        new_img.close()
+
+    async def to_ascii(self, new_image_name: str = 'new', save_path: str = 'img/ascii',
+                       greyscale_path: str = 'img/greyscale') -> None:
+        """
+        create and save new image in ascii art
+        :return:
+        """
+        image_size: tuple = self._get_info()['size']
+
+        # replace the original with the greyscale image
+        self.image = f'{greyscale_path}/{new_image_name}.png'
+
+        # check the shade of grey for each pixel
+        pixel_color = await asyncio.wait([
+            self.__create_image(image_size=image_size, image_name=new_image_name),
+            self.__get_pixel_color(image_size=image_size)
+        ])
+        print(pixel_color)
 
         # check the pixel color to add the correct character
         new_img = PilImg.open(f'{save_path}/{new_image_name}.png')
