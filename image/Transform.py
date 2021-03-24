@@ -14,7 +14,7 @@ class Transform(Image):
         self.image = image_path
         self.__ascii_list = '@*/.,%$()&+-^_:<>=;!?'
 
-    def to_greyscale(self, image_name: str, path: str = 'img/greyscale') -> None:
+    def to_greyscale(self, image_name: str, path: str = 'img/greyscale', resize: bool = False, resize_dimension: tuple = ()) -> None:
         """
         convert and save RGB image to greyscale
         :param path:
@@ -26,11 +26,12 @@ class Transform(Image):
         img_greyscale = img_load.convert('L')
         img_greyscale.save(f'{path}/{image_name}.png')
 
-    async def __get_pixel_color(self, image_size: tuple):
+    def __get_pixel_color(self, image_size: tuple):
         """
         get pixel color from
         :return:
         """
+        await asyncio.sleep(0.01)
         pixel_color = {}
 
         for y in range(0, image_size[1]):
@@ -49,6 +50,7 @@ class Transform(Image):
         create empty image with black background and save it to the selected folder
         :return:
         """
+        await asyncio.sleep(0.01)
         new_img = PilImg.new(mode='L', size=image_size)
         new_img.save(f'{save_path}/{image_name}.png')
         new_img.close()
@@ -59,19 +61,16 @@ class Transform(Image):
         create and save new image in ascii art
         :return:
         """
+        self.image = f'{greyscale_path}/{new_image_name}.png'
         image_size: tuple = self._get_info()['size']
 
-        # replace the original with the greyscale image
-        self.image = f'{greyscale_path}/{new_image_name}.png'
-
-        # check the shade of grey for each pixel
-        pixel_color = await asyncio.wait([
-            self.__create_image(image_size=image_size, image_name=new_image_name),
-            self.__get_pixel_color(image_size=image_size)
-        ])
-        print(pixel_color)
+        pixel_color = self.__get_pixel_color(image_size=image_size)
 
         # check the pixel color to add the correct character
+        await asyncio.wait([
+            self.__create_image(image_size=image_size, image_name=new_image_name),
+        ])
+
         new_img = PilImg.open(f'{save_path}/{new_image_name}.png')
         set_font_size = PilFont.truetype('arial.ttf', 1)
         add_ascii = PilDraw.Draw(new_img)
