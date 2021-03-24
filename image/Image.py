@@ -1,9 +1,9 @@
-from PIL import Image as Pil_Image
+from PIL import Image as PilImg
 
 
 class Image:
     def __init__(self):
-        self.__image: Pil_Image
+        self.__image: PilImg
 
     def _get_info(self) -> dict:
         """
@@ -20,7 +20,7 @@ class Image:
                 'size': size,
                 'mode': mode
             }
-        except Pil_Image.UnidentifiedImageError:
+        except PilImg.UnidentifiedImageError:
             print('image isn\'t correct')
 
     def _show(self) -> None:
@@ -42,9 +42,9 @@ class Image:
         :param image_path:
         :return:
         """
-        self.__image = Pil_Image.open(image_path)
+        self.__image = PilImg.open(image_path)
 
-    def get_image(self) -> None:
+    def get_image(self) -> PilImg:
         """
         get image
         :return:

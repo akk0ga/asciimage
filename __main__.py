@@ -7,7 +7,7 @@ class App:
         self.__transform = Transform(image_path='img/original/toga.jpg')
 
     def run(self):
-        self.__transform.to_greyscale(image_name='toga')
+        self.__transform.to_ascii(new_image_name='toga')
 
 
 if __name__ == "__main__":
