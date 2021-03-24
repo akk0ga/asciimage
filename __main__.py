@@ -9,7 +9,7 @@ class App:
     async def run(self):
         image_name = 'smiley'
         self.__transform.to_greyscale(image_name=image_name)
-        await self.__transform.to_ascii(new_image_name=image_name)
+        self.__transform.to_ascii(new_image_name=image_name)
 
 
 if __name__ == "__main__":

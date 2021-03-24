@@ -5,8 +5,6 @@ from PIL import ImageFont as PilFont
 from image.Image import Image
 from random import randint
 
-import asyncio
-
 
 class Transform(Image):
     def __init__(self, image_path: str):
@@ -31,7 +29,6 @@ class Transform(Image):
         get pixel color from
         :return:
         """
-        await asyncio.sleep(0.01)
         pixel_color = {}
 
         for y in range(0, image_size[1]):
@@ -42,20 +39,18 @@ class Transform(Image):
                 # stock pixel in the color list and assign ascii to it
                 if pixel not in pixel_color and pixel > 10:
                     pixel_color[pixel] = self.__ascii_list[randint(0, len(self.__ascii_list) - 1)]
-                    print(f'({x}, {y}) -> {pixel}')
         return pixel_color
 
-    async def __create_image(self, image_size: tuple, image_name: str = 'new', save_path: str = 'img/ascii') -> None:
+    def __create_image(self, image_size: tuple, image_name: str = 'new', save_path: str = 'img/ascii') -> None:
         """
         create empty image with black background and save it to the selected folder
         :return:
         """
-        await asyncio.sleep(0.01)
         new_img = PilImg.new(mode='L', size=image_size)
         new_img.save(f'{save_path}/{image_name}.png')
         new_img.close()
 
-    async def to_ascii(self, new_image_name: str = 'new', save_path: str = 'img/ascii',
+    def to_ascii(self, new_image_name: str = 'new', save_path: str = 'img/ascii',
                        greyscale_path: str = 'img/greyscale') -> None:
         """
         create and save new image in ascii art
@@ -63,13 +58,8 @@ class Transform(Image):
         """
         self.image = f'{greyscale_path}/{new_image_name}.png'
         image_size: tuple = self._get_info()['size']
-
         pixel_color = self.__get_pixel_color(image_size=image_size)
-
-        # check the pixel color to add the correct character
-        await asyncio.wait([
-            self.__create_image(image_size=image_size, image_name=new_image_name),
-        ])
+        self.__create_image(image_size=image_size, image_name=new_image_name)
 
         new_img = PilImg.open(f'{save_path}/{new_image_name}.png')
         set_font_size = PilFont.truetype('arial.ttf', 1)
