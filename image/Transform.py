@@ -12,11 +12,12 @@ class Transform(Image):
     def __init__(self, image_path: str):
         super().__init__()
         self.image = image_path
-        self.__ascii_list = '@*/.,%$()&+-^_:<>=;!?'
+        self.__ascii_list = '+:/-=@$_'
 
-    def to_greyscale(self, new_height: int, new_width: int, image_name: str, path: str = 'img/greyscale') -> None:
+    def to_greyscale(self, image_name: str, new_height: int = 0, new_width: int = 0, path: str = 'img/greyscale') -> None:
         """
         resize convert and save RGB image to resize grayscale image
+        if you want to resize the image you have to precise new width AND new height
         :param new_width:
         :param new_height:
         :param path:
@@ -24,11 +25,14 @@ class Transform(Image):
         :return:
         """
         # keep aspect ratio
-        width = int(new_height / new_height * new_width)
+        if new_height and new_width != 0:
+            width = int(new_height / new_height * new_width)
+            resize = self.image.resize((width, new_height))
+            img_greyscale = resize.convert('L')
+        else:
+            img_greyscale = self.image.convert('L')
+            print('not transformed')
 
-        # resize and save
-        resize = self.image.resize((width, new_height))
-        img_greyscale = resize.convert('L')
         img_greyscale.save(f'{path}/{image_name}.png')
 
     def get_pixel_color(self, image_size: tuple):
@@ -62,17 +66,17 @@ class Transform(Image):
         # ascii list
         ascii = {
             '0-29': ' ',
-            '30-50': '+',
-            '51-80': ':',
-            '81-110': '/',
-            '111-140': '-',
-            '141-170': '=',
-            '171-200': '@',
-            '201-230': '$',
-            '231-255': '_'
+            '30-59': '+',
+            '60-89': ':',
+            '90-119': '/',
+            '120-149': '-',
+            '150-179': '=',
+            '180-209': '@',
+            '210-239': '$',
+            '240-255': '_'
         }
 
-        # open text file
+        # write ascii in text file
         with open('draw.txt', 'w') as data:
             for y in range(0, image_size[1]):
                 for x in range(0, image_size[0]):
