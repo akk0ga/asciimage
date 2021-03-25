@@ -1,2 +1,7 @@
-# asciimage
-convert any image to ascii art
+# Asciimage
+This program can convert any image to ASCII art
+
+# Dependencies
+- PIL
+
+- random -> randint
