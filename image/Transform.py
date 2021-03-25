@@ -1,11 +1,5 @@
-from PIL import Image as PilImg
-from PIL import ImageDraw as PilDraw
-from PIL import ImageFont as PilFont
-
 from image.Image import Image
 from random import randint
-
-import time
 
 
 class Transform(Image):
@@ -80,15 +74,12 @@ class Transform(Image):
         with open('draw.txt', 'w') as data:
             for y in range(0, image_size[1]):
                 for x in range(0, image_size[0]):
-                    coordinate = (x, y)
-                    color = self.image.getpixel(coordinate)
+                    color = self.image.getpixel((x, y))
+
                     for key in ascii:
                         new_key = key.replace('-', ' ')
                         val_min, val_max = new_key.split()
                         if int(val_min) <= color <= int(val_max):
-                            if x != image_size[0]-1:
-                                data.write(ascii[f'{val_min}-{val_max}'])
-                            else:
-                                char = ascii[f'{val_min}-{val_max}']
-                                data.write(f'{char}\n')
+                            char = ascii[f'{val_min}-{val_max}'] if x != image_size[0]-1 else f'{ascii[f"{val_min}-{val_max}"]}\n'
+                            data.write(char)
             data.close()
