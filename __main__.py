@@ -6,9 +6,10 @@ class App:
         self.__transform = Transform(image_path=image_path)
 
     def run(self):
-        self.__transform.to_ascii()
+        self.__transform.to_ascii(new_width=500, new_height=200, rate_color=13)
+        # self.__transform.create_char_dict()
 
 
 if __name__ == "__main__":
-    app = App(image_path='img/original/portal.jpg')
+    app = App(image_path='img/original/mario.jpg')
     app.run()
