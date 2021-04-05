@@ -57,8 +57,8 @@ class Transform:
         char = {}
         max_color = 255
 
-        if rate < 13:
-            rate = 13
+        if rate < len(self.__char_list):
+            rate = len(self.__char_list)
 
         while max_color > 0:
             max_val = max_color - 1 if max_color != 255 else 255
