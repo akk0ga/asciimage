@@ -54,21 +54,20 @@ class Transform:
         :param rate:
         :return:
         """
-        char = {}
-        max_color = 255
-
-        if rate < len(self.__char_list):
-            rate = len(self.__char_list)
+        char: dict = {}
+        lenght_char_list: int = len(self.__char_list)
+        max_color: int = 255
+        
+        if rate < lenght_char_list:
+            rate = lenght_char_list 
 
         while max_color > 0:
-            max_val = max_color - 1 if max_color != 255 else 255
-            min_val = max_color - rate
-            if min_val < 0:
-                min_val = 0
+            max_val: int = max_color - 1 if max_color != 255 else 255
+            min_val: int = 0 if min_val < 0 else max_color - rate
             max_color -= rate
 
-            choose_char = randint(0, len(self.__char_list) - 1)
-            char[f'{min_val}-{max_val}'] = self.__char_list[choose_char]
-            self.__char_list.replace(self.__char_list[choose_char], '')
+            select_char = randint(0, lenght_char_list - 1)
+            char[f'{min_val}-{max_val}'] = self.__char_list[select_char]
+            self.__char_list.replace(self.__char_list[select_char], '')
 
         return char
