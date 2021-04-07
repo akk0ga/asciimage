@@ -2,7 +2,7 @@ from PIL import Image as PilImg
 from random import randint
 
 
-class Transform:
+class TransformImage:
     __char_list: str = '*-/@$<µ%=)&{!?:._+§'
 
     def __init__(self, image_path: str):
