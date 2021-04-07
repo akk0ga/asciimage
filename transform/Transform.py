@@ -4,9 +4,10 @@ import abc
 
 
 class Transform:
+    __char_list: str = '*-/@$<µ%=)&{!?:._+§'
+
     def __init__(self, image_path: str):
         self.__image: PilImg = PilImg.open(image_path)
-        self.__char_list = '*-/@$<µ%=)&{!?:._+§'
 
     def __to_greyscale(self, new_height: int, new_width: int) -> str:
         """
