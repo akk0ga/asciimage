@@ -1,6 +1,5 @@
 from PIL import Image as PilImg
 from random import randint
-import abc
 
 
 class Transform:
