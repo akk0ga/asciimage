@@ -1,5 +1,6 @@
 from PIL import Image as PilImg
 from random import randint
+import abc
 
 
 class Transform:
@@ -25,14 +26,16 @@ class Transform:
         img_greyscale.save(f'img/grayscale.png')
         return f'img/grayscale.png'
 
-    def to_ascii(self, new_width: int = 0, new_height: int = 0, rate_color: int = 13) -> None:
+    def to_ascii(self, rate_color: int, new_width: int = 0, new_height: int = 0) -> None:
         """
         create ascii image\n
         rate color must be more or equal to 13
         :return:
         """
+        length_char_list = len(self.__char_list)
         self.__image = PilImg.open(self.__to_greyscale(new_width=new_width, new_height=new_height))
-        color_slice = self.__create_char_dict(rate=rate_color)
+        color_slice = self.__create_char_dict(rate=rate_color if rate_color > length_char_list else length_char_list,
+                                              length_char_list=length_char_list)
 
         # write color_slice in text file
         with open('draw.txt', 'w') as data:
@@ -48,26 +51,22 @@ class Transform:
             data.close()
             self.__image.close()
 
-    def __create_char_dict(self, rate: int) -> dict:
+    def __create_char_dict(self, rate: int, length_char_list: int) -> dict:
         """
         create color slice dict to know which character is for which gray shade
         :param rate:
         :return:
         """
         char: dict = {}
-        lenght_char_list: int = len(self.__char_list)
         max_color: int = 255
-        
-        if rate < lenght_char_list:
-            rate = lenght_char_list 
 
         while max_color > 0:
             max_val: int = max_color - 1 if max_color != 255 else 255
-            min_val: int = 0 if min_val < 0 else max_color - rate
+            min_val: int = 0 if max_color - rate < 0 else max_color - rate
             max_color -= rate
 
-            select_char = randint(0, lenght_char_list - 1)
+            select_char = randint(0, length_char_list - 1)
             char[f'{min_val}-{max_val}'] = self.__char_list[select_char]
             self.__char_list.replace(self.__char_list[select_char], '')
-
+        print(char)
         return char
