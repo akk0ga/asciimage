@@ -9,32 +9,39 @@ class Transform:
     def __init__(self, image_path: str):
         self.__image: PilImg = PilImg.open(image_path)
 
-    def __to_greyscale(self, new_height: int, new_width: int) -> str:
+    def __to_grayscale(self, new_size: tuple) -> str:
         """
         resize convert and save RGB transform to resize grayscale transform
-        if you want to resize the transform you have to precise new width AND new height
-        :param new_width:
-        :param new_height:
-        :return:
+        if you want to resize (new_width, new_height)
+        return the path of img grayscaled\n
+        :param new_size: tuple
+        :return: str
         """
+        path = 'img/grayscale.png'
+        print(new_size)
         # keep aspect ratio
-        if new_height != 0 and new_width != 0:
+        if new_size is not None:
+            new_width, new_height = new_size
             width = int(new_height / new_height * new_width)
             resize = self.__image.resize((width, new_height))
             img_greyscale = resize.convert('L')
         else:
             img_greyscale = self.__image.convert('L')
-        img_greyscale.save(f'img/grayscale.png')
-        return f'img/grayscale.png'
 
-    def to_ascii(self, rate_color: int, new_width: int = 0, new_height: int = 0) -> None:
+        img_greyscale.save(path)
+        return path
+
+    def to_ascii(self, rate_color: int, new_size: tuple = ()) -> None:
         """
         create ascii image\n
-        rate color must be more or equal to 13
-        :return:
+        :return: None
         """
         length_char_list = len(self.__char_list)
-        self.__image = PilImg.open(self.__to_greyscale(new_width=new_width, new_height=new_height))
+
+        # transform image to b&w
+        self.__image = PilImg.open(self.__to_grayscale(new_size=new_size))
+
+        # set the char list for color
         color_slice = self.__create_char_dict(rate=rate_color if rate_color > length_char_list else length_char_list,
                                               length_char_list=length_char_list)
 
