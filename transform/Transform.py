@@ -18,7 +18,6 @@ class Transform:
         :return: str
         """
         path = 'img/grayscale.png'
-        print(new_size)
         # keep aspect ratio
         if new_size is not None:
             new_width, new_height = new_size
@@ -31,7 +30,7 @@ class Transform:
         img_greyscale.save(path)
         return path
 
-    def to_ascii(self, rate_color: int, new_size: tuple = ()) -> None:
+    def to_ascii(self, rate_color: int = 0, new_size: tuple = ()) -> None:
         """
         create ascii image\n
         :return: None
@@ -42,9 +41,12 @@ class Transform:
         self.__image = PilImg.open(self.__to_grayscale(new_size=new_size))
 
         # set the char list for color
-        color_slice = self.__create_char_dict(rate=rate_color if rate_color > length_char_list else length_char_list,
-                                              length_char_list=length_char_list)
+        if rate_color <= length_char_list and rate_color != 0:
+            color_slice = self.__create_char_dict(rate=rate_color, length_char_list=length_char_list)
+        else:
+            color_slice = self.__create_char_dict(rate=length_char_list, length_char_list=length_char_list)
 
+        print(color_slice)
         # write color_slice in text file
         with open('draw.txt', 'w') as data:
             for y in range(0, self.__image.height):
@@ -76,5 +78,4 @@ class Transform:
             select_char = randint(0, length_char_list - 1)
             char[f'{min_val}-{max_val}'] = self.__char_list[select_char]
             self.__char_list.replace(self.__char_list[select_char], '')
-        print(char)
         return char

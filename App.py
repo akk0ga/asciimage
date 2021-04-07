@@ -6,7 +6,7 @@ class App:
         self.__transform = Transform(image_path=image_path)
 
     def run(self):
-        self.__transform.to_ascii(new_width=500, new_height=200, rate_color=13)
+        self.__transform.to_ascii(new_size=(500, 200))
 
 
 if __name__ == "__main__":
