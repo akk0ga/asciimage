@@ -40,13 +40,12 @@ class Transform:
         # transform image to b&w
         self.__image = PilImg.open(self.__to_grayscale(new_size=new_size))
 
-        # set the char list for color
+        # set the char list for color_slice
         if rate_color <= length_char_list and rate_color != 0:
             color_slice = self.__create_char_dict(rate=rate_color, length_char_list=length_char_list)
         else:
             color_slice = self.__create_char_dict(rate=length_char_list, length_char_list=length_char_list)
 
-        print(color_slice)
         # write color_slice in text file
         with open('draw.txt', 'w') as data:
             for y in range(0, self.__image.height):
