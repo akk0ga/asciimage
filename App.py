@@ -6,7 +6,23 @@ class App:
         self.__transform = TransformImage(image_path=image_path)
 
     def run(self):
-        self.__transform.to_ascii(new_size=(500, 200))
+        choice: str = input('1 -> image\n2 -> video\nyour choice: ')
+        while choice != '1' and choice != '2':
+            choice: str = input('1 -> image\n2 -> video\nyour choice: ')
+
+        if choice == '1':
+            choice: str = input('want you resize the image ? [y/n]: ')
+            while choice != 'y' and choice != 'n':
+                choice: str = input('1 -> image\n2 -> video\nyour choice: ')
+
+            if choice == 'y':
+                width: str = input('new width: ')
+                height: str = input('new height: ')
+                self.__transform.to_ascii(new_size=(int(width), int(height)))
+            else:
+                self.__transform.to_ascii()
+        else:
+            print('video')
 
 
 if __name__ == "__main__":
