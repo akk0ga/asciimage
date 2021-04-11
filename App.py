@@ -1,5 +1,5 @@
 from transform.TransformImage import TransformImage
-
+from transform.TransformVideo import TransformVideo
 
 class App:
     def __init__(self, image_path: str):
@@ -22,7 +22,8 @@ class App:
             else:
                 self.__transform.to_ascii()
         else:
-            print('video')
+            video = TransformVideo()
+            video.to_ascii()
 
 
 if __name__ == "__main__":
