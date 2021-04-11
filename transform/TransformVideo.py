@@ -28,8 +28,16 @@ class TransformVideo:
             # set the color to gray
             gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
 
+            cv.putText(gray, 'OpenCV', (10, 200), cv.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv.LINE_AA)
             # Display video
-            cv.imshow('you in ascii... You\' pretty !', gray)
+            print(gray[0, 0])
+            cv.imshow('video', gray)
+            img = np.zeros((512, 512, 3), np.uint8)
+            cv.imshow('image', img)
+            # ==================================
+            # get pixel
+            # ==================================
+            # access image property
 
             # if put on q stop all
             if cv.waitKey(1) == ord('q'):

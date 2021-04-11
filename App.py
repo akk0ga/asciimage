@@ -1,6 +1,7 @@
 from transform.TransformImage import TransformImage
 from transform.TransformVideo import TransformVideo
 
+
 class App:
     def __init__(self, image_path: str):
         self.__transform = TransformImage(image_path=image_path)
