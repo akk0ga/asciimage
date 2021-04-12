@@ -24,7 +24,7 @@ class App:
                 self.__transform.to_ascii()
         else:
             video = TransformVideo()
-            video.to_ascii()
+            video.webcam()
 
 
 if __name__ == "__main__":
