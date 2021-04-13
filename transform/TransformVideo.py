@@ -1,10 +1,11 @@
+import time
+
 import numpy as np
 import cv2 as cv
 from random import randint
 
 
 class TransformVideo:
-    __char_list: str = '*-/@$<µ%=)&{!?:._+§'
 
     def webcam(self):
         cap = cv.VideoCapture(0)
@@ -22,55 +23,34 @@ class TransformVideo:
                 print("Can't receive frame (stream end?). Exiting ...")
                 break
 
-            # Our operations on the frame come here
             # set the color to video_grayscale
             video_grayscale = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
+            self.draw_grid(cols=20, rows=20, video=video_grayscale)
 
             cv.imshow('video', video_grayscale)
-            self.to_ascii(video=video_grayscale)
             if cv.waitKey(1) == ord('q'):
                 break
 
         cap.release()
         cv.destroyAllWindows()
 
-    def to_ascii(self, video):
-        rows, cols = video.shape
-        new_width: int = 150
-        new_height: int = 200
-
-        # set the char list for color_slice
-        color_slice = self.__create_char_dict(rate=20, length_char_list=len(self.__char_list))
-        char = ''
-
-        for col in range(0, cols):
-            for row in range(0, rows):
-                color = video[row, col]
-                for key in color_slice:
-                    val_min, val_max = key.split('-')
-                    if int(val_min) <= color <= int(val_max):
-                        char_select = color_slice[f'{val_min}-{val_max}'] if row != rows - 1 else f'{color_slice[f"{val_min}-{val_max}"]}\n'
-                        char = char + char_select
-            if col == cols - 1:
-                char = char + '\n'
-
-        print(char)
-
-    def __create_char_dict(self, rate: int, length_char_list: int) -> dict:
+    def draw_grid(self, cols: int, rows: int, video):
         """
-        create color slice dict to know which character is for which gray shade
-        :param rate:
+        draw grid on video
+        :param cols:
+        :param rows:
+        :param video_size:
         :return:
         """
-        char: dict = {}
-        max_color: int = 255
+        width, height = video.shape
 
-        while max_color > 0:
-            max_val: int = max_color - 1 if max_color != 255 else 255
-            min_val: int = 0 if max_color - rate < 0 else max_color - rate
-            max_color -= rate
+        cols = width // 35
+        rows = height // 3
 
-            select_char = randint(0, length_char_list - 1)
-            char[f'{min_val}-{max_val}'] = self.__char_list[select_char]
-            self.__char_list.replace(self.__char_list[select_char], '')
-        return char
+        """
+        for col in range(cols, height, cols):
+            cv.line(video, (col, 0), (col, height), (255, 0, 0), 1)
+        """
+
+        for row in range(rows, height, rows):
+            cv.line(video, (0, row), (height, row), (255, 0, 0), 1)
