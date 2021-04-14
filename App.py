@@ -28,5 +28,5 @@ class App:
 
 
 if __name__ == "__main__":
-    app = App(image_path='img/original/mario.jpg')
+    app = App(image_path='img/original/portal.jpg')
     app.run()

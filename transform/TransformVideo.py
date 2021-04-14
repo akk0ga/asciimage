@@ -39,18 +39,23 @@ class TransformVideo:
         draw grid on video
         :param cols:
         :param rows:
-        :param video_size:
+        :param video:
         :return:
         """
-        width, height = video.shape
+        mean: list = []
+        height, width = video.shape
+        total_cols = width // cols
+        total_rows = height // rows
 
-        cols = width // 35
-        rows = height // 3
-
-        """
-        for col in range(cols, height, cols):
+        for col in range(total_cols, width, total_cols):
             cv.line(video, (col, 0), (col, height), (255, 0, 0), 1)
-        """
 
-        for row in range(rows, height, rows):
-            cv.line(video, (0, row), (height, row), (255, 0, 0), 1)
+        for row in range(total_rows, height, total_rows):
+            cv.line(video, (0, row), (width, row), (255, 0, 0), 1)
+
+        for col in range(0, total_cols):
+            for row in range(0, total_rows):
+                mean.append(video[row, col])
+
+                # uncomment to check if take only one cell
+                # cv.line(video, (col, row), (col, row), (255, 0, 0), 1)
