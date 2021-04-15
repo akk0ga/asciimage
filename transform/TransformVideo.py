@@ -7,10 +7,9 @@ from random import randint
 
 class TransformVideo:
 
-
     def webcam(self):
         cap = cv.VideoCapture(0)
-
+        char_dict = self.create_char_dict()
         # check if already open
         if not cap.isOpened():
             print("Cannot open camera")
@@ -26,8 +25,8 @@ class TransformVideo:
 
             # set the color to video_grayscale
             video_grayscale = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
-            grid = self.calc_grid(cols=40, rows=40, video_shape=video_grayscale.shape)
-            self.draw_grid(video=video_grayscale, grid=grid)
+            grid = self.calc_grid(cols=100, rows=50, video_shape=video_grayscale.shape)
+            self.draw_grid(grid=grid, video=video_grayscale)
 
             cv.imshow('You are so pretty', video_grayscale)
             if cv.waitKey(1) == ord('q'):
@@ -56,8 +55,8 @@ class TransformVideo:
         :param video:
         :return:
         """
-        total_rows = 40
-        total_cols = 40
+        total_rows = 100
+        total_cols = 50
         ascii = ''
         cell_cols, cell_rows, height, width = grid
 
@@ -74,9 +73,7 @@ class TransformVideo:
                 for cell_col in range(cell_cols * (1 + col - 1), cell_cols * (1 + col)):
                     for cell_row in range(cell_rows * (1 + row - 1), cell_rows * (1 + row)):
                         pixels.append(video[row, col])
-                ascii += f'a'
             ascii += '\n'
-        print(ascii)
 
     def calc_pixel_mean(self, pixels: list) -> int:
         """
@@ -89,24 +86,23 @@ class TransformVideo:
 
         return total // len(pixels)
 
-    def create_char_dict(self, rate: int, length_char_list: int) -> dict:
+    def create_char_dict(self) -> dict:
         """
         create color slice dict to know which character is for which gray shade
-        :param rate:
         :return:
         """
         char: dict = {}
         max_color: int = 255
         char_list: str = '*-/@$<µ%=)&{!?:._+§'
+        rate = len(char_list)
 
         while max_color > 0:
             max_val: int = max_color - 1 if max_color != 255 else 255
             min_val: int = 0 if max_color - rate < 0 else max_color - rate
             max_color -= rate
 
-            select_char = randint(0, length_char_list - 1)
+            select_char = randint(0, len(char_list) - 1)
             char[f'{min_val}-{max_val}'] = char_list[select_char]
             char_list = char_list.replace(char_list[select_char], '')
-            print(f'select: {select_char} / list: {char_list}')
         print(char)
         return char
