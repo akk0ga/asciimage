@@ -25,7 +25,8 @@ class TransformVideo:
 
             # set the color to video_grayscale
             video_grayscale = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
-            self.draw_grid(cols=20, rows=20, video=video_grayscale)
+            grid = self.calc_grid(cols=20, rows=20, video_shape=video_grayscale.shape)
+            self.draw_grid(video=video_grayscale, grid=grid)
 
             cv.imshow('video', video_grayscale)
             if cv.waitKey(1) == ord('q'):
@@ -34,18 +35,21 @@ class TransformVideo:
         cap.release()
         cv.destroyAllWindows()
 
-    def draw_grid(self, cols: int, rows: int, video):
+    def calc_grid(self, cols: int, rows: int, video_shape: tuple) -> tuple:
+        height, width = video_shape
+        total_cols = width // cols
+        total_rows = height // rows
+        return total_cols, total_rows, height, width
+
+    def draw_grid(self, grid: tuple, video):
         """
         draw grid on video
-        :param cols:
-        :param rows:
+        :param grid:
         :param video:
         :return:
         """
         mean: list = []
-        height, width = video.shape
-        total_cols = width // cols
-        total_rows = height // rows
+        total_cols, total_rows, height, width = grid
 
         for col in range(total_cols, width, total_cols):
             cv.line(video, (col, 0), (col, height), (255, 0, 0), 1)
@@ -53,9 +57,16 @@ class TransformVideo:
         for row in range(total_rows, height, total_rows):
             cv.line(video, (0, row), (width, row), (255, 0, 0), 1)
 
-        for col in range(0, total_cols):
+        for col in range(total_cols, total_cols+total_cols):
             for row in range(0, total_rows):
                 mean.append(video[row, col])
-
                 # uncomment to check if take only one cell
-                # cv.line(video, (col, row), (col, row), (255, 0, 0), 1)
+                cv.line(video, (col, row), (col, row), (255, 0, 0), 1)
+
+        # calc mean
+        total = 0
+        for value in mean:
+            total = total+value
+
+        total = total//len(mean)
+        print(total)
