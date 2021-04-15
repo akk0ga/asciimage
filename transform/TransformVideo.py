@@ -55,34 +55,28 @@ class TransformVideo:
         :param video:
         :return:
         """
-        pixels: list = []
         total_cols: int = 20
         total_rows: int = 20
         i = 1
 
         cell_cols, cell_rows, height, width = grid
 
+        # draw the grid
         for col in range(cell_cols, width, cell_cols):
             cv.line(video, (col, 0), (col, height), (255, 0, 0), 1)
-
         for row in range(cell_rows, height, cell_rows):
             cv.line(video, (0, row), (width, row), (255, 0, 0), 1)
 
-        while i <= total_cols:
-            j = 1
-            while j <= total_rows:
-                print(i)
-                for col in range(cell_cols * i-1, cell_cols * i):
-                    for row in range(cell_rows * j-1, cell_rows * j):
+        # calc the cell content
+        for row in range(0, total_rows):
+            for col in range(0, total_cols):
+                pixels: list = []
+                for cell_col in range(cell_cols * (1 + col - 1), cell_cols * (1 + col)):
+                    for cell_row in range(cell_rows * (1 + row - 1), cell_rows * (1 + row)):
                         pixels.append(video[row, col])
-                        # uncomment to check if take only one cell
-                        # cv.line(video, (col, row), (col, row), (255, 0, 0), 1)
-                j += 1
-            i += 1
+                # print(f'row: {row} | col: {col} / value: {self.calc_pixel_mean(pixels=pixels)}')
 
-        self.calc_pixel_mean(pixels=pixels)
-
-    def calc_pixel_mean(self, pixels: list):
+    def calc_pixel_mean(self, pixels: list) -> int:
         """
         calc pixel mean
         :return:
@@ -91,5 +85,4 @@ class TransformVideo:
         for pixel in pixels:
             total = total + pixel
 
-        total = total // len(pixels)
-        print(total)
+        return total // len(pixels)
